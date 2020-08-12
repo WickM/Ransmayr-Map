@@ -34,12 +34,18 @@ dat_ransmayr <- readxl::read_excel("data/Mapping the Atlas.xlsx") %>%
 val_lonlat <- leaflet::validateCoords(lng = dat_ransmayr$lng , lat = dat_ransmayr$lat) %>% 
   filter (is.na(lng) | is.na(lat))
 
+sextant_icon <- makeIcon(
+  iconUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b0/Sextant.png",
+  iconWidth = 20, iconHeight = 20
+)
+
 
 m <- leaflet() %>%
   addTiles() %>%
   addMarkers(lng = dat_ransmayr$lng , lat = dat_ransmayr$lat, popup = glue( 
-    "langengrad: {dat_ransmayr$lng} <br> 
-    breitengrad: {dat_ransmayr$lat}  <br>
-    text: {dat_ransmayr$text}")
-    )
+    "text: {dat_ransmayr$text} <br> 
+    {dat_ransmayr$kategorie_der_anwesenheit}  <br>
+    "), clusterOptions = markerClusterOptions(), icon= sextant_icon
+  )
 m
+
