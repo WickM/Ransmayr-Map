@@ -34,18 +34,28 @@ dat_ransmayr <- readxl::read_excel("data/Mapping the Atlas.xlsx") %>%
 val_lonlat <- leaflet::validateCoords(lng = dat_ransmayr$lng , lat = dat_ransmayr$lat) %>% 
   filter (is.na(lng) | is.na(lat))
 
-sextant_icon <- makeIcon(
-  iconUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b0/Sextant.png",
-  iconWidth = 20, iconHeight = 20
-)
+# sextant_icon <- makeIcon(
+#   iconUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b0/Sextant.png",
+#   iconWidth = 20, iconHeight = 20
+# )
 
 
-m <- leaflet() %>%
-  addTiles() %>%
-  addMarkers(lng = dat_ransmayr$lng , lat = dat_ransmayr$lat, popup = glue( 
-    "text: {dat_ransmayr$text} <br> 
-    {dat_ransmayr$kategorie_der_anwesenheit}  <br>
-    "), clusterOptions = markerClusterOptions(), icon= sextant_icon
-  )
+m <- leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
+  addTiles()
+  
+  for (ii in unique(dat_ransmayr$text)) {
+    temp <- dat_ransmayr %>% 
+      filter(text == ii)
+    
+    m <- m %>% addCircleMarkers(lng = temp$lng , lat = temp$lat, popup = glue( 
+      "Text: <b>{temp$text}</b> <br> 
+    {temp$kategorie_der_anwesenheit}  <br>
+    Ort: {temp$ort_laut_atlas}
+    "),
+      color = "red", radius = 6 ,stroke = FALSE, fillOpacity = 0.5, group = ii)
+  }
+  
+
+m <- m %>% addLayersControl(overlayGroups = unique(dat_ransmayr$text))
 m
 
