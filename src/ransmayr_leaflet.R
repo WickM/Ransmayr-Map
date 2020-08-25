@@ -40,7 +40,7 @@ val_lonlat <- leaflet::validateCoords(lng = dat_ransmayr$lng , lat = dat_ransmay
 # )
 
 
-m <- leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
+m <- leaflet(options = leafletOptions(minZoom = 2)) %>%
   addTiles()
   
   for (ii in unique(dat_ransmayr$text)) {
@@ -52,7 +52,8 @@ m <- leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
     {temp$kategorie_der_anwesenheit}  <br>
     Ort: {temp$ort_laut_atlas}
     "),
-      color = "red", radius = 6 ,stroke = FALSE, fillOpacity = 0.5, group = ii)
+      color = "red", radius = 6 ,stroke = FALSE, fillOpacity = 0.5, group = ii, 
+      clusterOptions = markerClusterOptions(freezeAtZoom = 10))
   }
   
 
