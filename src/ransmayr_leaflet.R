@@ -19,7 +19,17 @@ library(leaflet)
 library(glue)
 
 ###readingData----
-dat_ransmayr <- readxl::read_excel("data/Mapping the Atlas.xlsx") %>% 
+dat_ransmayr <- readxl::read_excel("data/Mapping the Atlas2.xlsx") %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(- dplyr::starts_with("x")) %>% 
+  dplyr::mutate(langengrad = stringr::str_remove(langengrad, ","), 
+                breitengrad = stringr::str_remove(breitengrad, ",")) %>% 
+  dplyr::mutate(langengrad = stringr::str_trim(langengrad), 
+                breitengrad = stringr::str_trim(breitengrad)) %>% 
+  dplyr::mutate(lng = as.numeric(langengrad), 
+                lat = as.numeric(breitengrad))
+
+dat_ransmayr2 <- readxl::read_excel("data/Mapping the Atlas.xlsx") %>% 
   janitor::clean_names() %>% 
   dplyr::select(- dplyr::starts_with("x")) %>% 
   dplyr::mutate(langengrad = stringr::str_remove(langengrad, ","), 
@@ -59,4 +69,5 @@ m <- leaflet(options = leafletOptions(minZoom = 2)) %>%
 
 m <- m %>% addLayersControl(overlayGroups = unique(dat_ransmayr$text))
 m
+
 
