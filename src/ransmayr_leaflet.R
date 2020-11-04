@@ -54,8 +54,7 @@ m <- leaflet(options = leafletOptions(minZoom = 2)) %>%
     {temp$kategorie_der_anwesenheit}  <br>
     Ort: {temp$ort_laut_atlas}
     "),
-      color = "red", radius = 6 ,stroke = FALSE, fillOpacity = 0.5, group = ii, 
-      clusterOptions = markerClusterOptions(freezeAtZoom = 10))
+      color = "red", radius = 6 ,stroke = FALSE, fillOpacity = 0.5, group = ii)
   }
   
 
